@@ -1,7 +1,7 @@
 require 'sass'
 
 module Sasset
-  VERSION = '0.0.1'
+  VERSION = '1.0.0'
   
   class << self
     attr_accessor :asset_host
@@ -10,7 +10,7 @@ module Sasset
       if asset_host.respond_to? :call
         prefix = asset_host.call(source)
       else
-        prefix = asset_host
+        prefix = asset_host || ''
       end
       
       File.join(prefix, source)
@@ -18,8 +18,9 @@ module Sasset
   end
   
   module Functions
-    def asset_url(url)
-      Sass::Script::String.new(Sasset.asset_url(url.value))
+    def asset_url(asset)
+      url = Sasset.asset_url(asset.value)
+      Sass::Script::String.new("url('#{url}')")
     end
   end
 end
