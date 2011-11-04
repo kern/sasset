@@ -6,6 +6,7 @@ module Sasset
     attr_accessor :asset_host
 
     def asset_url(source)
+      source_before_assets = source
       source = "assets/#{source}"
       if asset_host.respond_to? :call
         prefix = asset_host.call(source)
@@ -13,7 +14,7 @@ module Sasset
         prefix = asset_host || ''
       end
 
-      mtime = File.new(File.join(Rails.root, 'app', source)).mtime.to_i
+      mtime = File.new(File.join(Rails.root, 'app/assets/images', source_before_assets)).mtime.to_i
       File.join(prefix, "#{source}?#{mtime}")
     end
   end
